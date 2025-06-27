@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Workflow {
+  id        Int     @id @default(autoincrement())
+  name      String
+  nodes     Node[]
+  edges     Edge[]
+  createdAt DateTime @default(now())
+}
+
+model Node {
+  id          Int    @id @default(autoincrement())
+  workflow    Workflow @relation(fields: [workflowId], references: [id])
+  workflowId  Int
+  type        NodeType
+  data        Json?
+  positionX   Float
+  positionY   Float
+}
+
+model Edge {
+  id          Int    @id @default(autoincrement())
+  workflow    Workflow @relation(fields: [workflowId], references: [id])
+  workflowId  Int
+  source      Int
+  target      Int
+  label       String?
+}
+
+enum NodeType {
+  Config
+  OracleDb
+  MariaDb
+  NAS
+  Server
+  ProcedureOracle
+}
