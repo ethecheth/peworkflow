@@ -5,5 +5,12 @@ export const NODE_TYPES = [
   'NAS',
   'Server',
   'ProcedureOracle',
+  'Schedule',
+  'Code',
+  'Mail',
+  'Web',
+  'IF',
+  'Switch',
+  'HttpRequest',
 ] as const;
-export type NodeType = typeof NODE_TYPES[number];
+export type NodeType = (typeof NODE_TYPES)[number];
