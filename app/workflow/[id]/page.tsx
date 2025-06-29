@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import React from 'react';
+import { getApiUrl } from '@/lib/api';
 
 const Workflow = dynamic(() => import('../../workflow'), { ssr: false });
 
@@ -22,7 +23,7 @@ export default function WorkflowEditorPage({ params }: { params: any }) {
       setWorkflow(null);
       return;
     }
-    fetch(`/api/workflows/${id}`)
+    fetch(getApiUrl(`/api/workflows/${id}`))
       .then((res) => {
         if (!res.ok) throw new Error('Not found');
         return res.json();

@@ -19,6 +19,7 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import Link from 'next/link';
 import { PlusIcon, MinusIcon, ArrowsPointingOutIcon, PaintBrushIcon, MagnifyingGlassPlusIcon, MagnifyingGlassMinusIcon } from '@heroicons/react/24/outline';
+import { getApiUrl } from '@/lib/api';
 
 import CustomNode from '@/components/CustomNodes';
 import { NodeType, NODE_TYPES } from '@/components/nodeTypes';
@@ -136,7 +137,7 @@ export default function Workflow({ initialWorkflow, isViewMode = false }: { init
 
   const fetchWorkflows = async () => {
     try {
-      const response = await fetch('/api/workflows');
+      const response = await fetch(getApiUrl('/api/workflows'));
       if (response.ok) {
         const data = await response.json();
         setWorkflows(data);
@@ -148,7 +149,7 @@ export default function Workflow({ initialWorkflow, isViewMode = false }: { init
 
   const fetchProjects = async () => {
     try {
-      const response = await fetch('/api/projects');
+      const response = await fetch(getApiUrl('/api/projects'));
       if (response.ok) {
         const data = await response.json();
         setProjects(data);
@@ -275,14 +276,14 @@ export default function Workflow({ initialWorkflow, isViewMode = false }: { init
       let response;
       if (initialWorkflow && initialWorkflow.id) {
         // UPDATE
-        response = await fetch(`/api/workflows/${initialWorkflow.id}`, {
+        response = await fetch(getApiUrl(`/api/workflows/${initialWorkflow.id}`), {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(workflowData),
         });
       } else {
         // CREATE
-        response = await fetch('/api/workflows', {
+        response = await fetch(getApiUrl('/api/workflows'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(workflowData),
@@ -307,7 +308,7 @@ export default function Workflow({ initialWorkflow, isViewMode = false }: { init
 
   const loadWorkflow = async (workflowId: number) => {
     try {
-      const response = await fetch(`/api/workflows/${workflowId}`);
+      const response = await fetch(getApiUrl(`/api/workflows/${workflowId}`));
       if (response.ok) {
         const workflow = await response.json();
         

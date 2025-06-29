@@ -8,6 +8,7 @@ import {
   Squares2X2Icon,
   DocumentTextIcon
 } from '@heroicons/react/24/outline';
+import { getApiUrl } from '@/lib/api';
 
 export default function WorkflowListPage() {
   const [workflows, setWorkflows] = useState<any[]>([]);
@@ -23,7 +24,7 @@ export default function WorkflowListPage() {
 
   const fetchWorkflows = async () => {
     try {
-      const response = await fetch('/api/workflows');
+      const response = await fetch(getApiUrl('/api/workflows'));
       const data = await response.json();
       setWorkflows(data);
     } catch (error) {
@@ -35,7 +36,7 @@ export default function WorkflowListPage() {
 
   const fetchProjects = async () => {
     try {
-      const response = await fetch('/api/projects');
+      const response = await fetch(getApiUrl('/api/projects'));
       const data = await response.json();
       setProjects(data);
     } catch (error) {
@@ -49,7 +50,7 @@ export default function WorkflowListPage() {
     }
 
     try {
-      const response = await fetch(`/api/workflows/${workflowId}`, {
+      const response = await fetch(getApiUrl(`/api/workflows/${workflowId}`), {
         method: 'DELETE',
       });
 

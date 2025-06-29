@@ -1,11 +1,13 @@
 import { prisma } from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
+import { NodeType } from '@prisma/client';
 
 // Input validation schemas
 interface CreateWorkflowData {
   name: string;
   projectCode?: string;
   nodes: Array<{
+    id?: string | number;
     type: string;
     data?: any;
     positionX: number;
@@ -15,8 +17,13 @@ interface CreateWorkflowData {
     source: number;
     target: number;
     label?: string;
+    sourceHandle?: string;
+    targetHandle?: string;
   }>;
 }
+
+// Valid node types from the enum
+const VALID_NODE_TYPES = Object.values(NodeType);
 
 function validateWorkflowData(data: any): data is CreateWorkflowData {
   if (!data || typeof data !== 'object') return false;
@@ -28,6 +35,7 @@ function validateWorkflowData(data: any): data is CreateWorkflowData {
   // Validate nodes
   for (const node of data.nodes) {
     if (!node.type || typeof node.type !== 'string') return false;
+    if (!VALID_NODE_TYPES.includes(node.type as NodeType)) return false;
     if (typeof node.positionX !== 'number' || typeof node.positionY !== 'number') return false;
   }
   
@@ -104,7 +112,7 @@ export async function POST(req: NextRequest) {
       const created = await prisma.node.create({
         data: {
           workflowId: workflow.id,
-          type: node.type,
+          type: node.type as NodeType,
           data: node.data || {},
           positionX: node.positionX,
           positionY: node.positionY,
